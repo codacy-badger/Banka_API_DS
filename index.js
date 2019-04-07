@@ -9,5 +9,6 @@ const PORT = process.env.PORT || 8080;
 
 // Launch app to listen to a specific port
 app.listen(PORT, () => {
+  // eslint-disable-next-line no-console
   console.log(`Running Banka on port ${PORT}`);
 });
