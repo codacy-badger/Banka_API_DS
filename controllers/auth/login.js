@@ -1,7 +1,6 @@
-const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const config = require('../../config');
-
+// import token generator
+const middleware = require('../../middleware');
 // import user data storage
 const { users } = require('../../models');
 
@@ -22,15 +21,13 @@ exports.login = (req, res) => {
 
   users.forEach((user) => {
     if (user.email === email) {
-      const token = jwt.sign({ email },
-        config.secret,
-        { expiresIn: '24h' });
+    //
 
       // return the JWT token for the future API calls
       res.json({
         status: 200,
         data: {
-          token,
+          token: middleware.token(user.id),
           id: user.id,
           firstName: user.firstName,
           lastName: user.lastName,
@@ -38,5 +35,14 @@ exports.login = (req, res) => {
         },
       });
     }
+  });
+};
+
+// fetch all users
+exports.allUsers = (req, res) => {
+  res.status(200).json({
+    status: 200,
+    data: users,
+    id: req.userId,
   });
 };

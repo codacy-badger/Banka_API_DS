@@ -3,7 +3,7 @@ const express = require('express');
 // Import Body parser
 const bodyParser = require('body-parser');
 // import router
-const apiRoutes = require('./api-routes/auth');
+const apiRoutes = require('./api-routes');
 
 
 // Initialize the app
