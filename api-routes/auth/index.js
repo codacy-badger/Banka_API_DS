@@ -2,10 +2,15 @@
 const router = require('express').Router();
 
 // import signup
-const authentication = require('../../controllers/auth/signup');
+const signupController = require('../../controllers/auth/signup');
+const loginController = require('../../controllers/auth/login');
+
+
 // auth routes
 router.route('/signup')
-  .post(authentication.signup);
+  .post(signupController.signup);
+router.route('/login')
+  .post(loginController.login);
 
 // Export API routes
 module.exports = router;

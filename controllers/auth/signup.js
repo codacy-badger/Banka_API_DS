@@ -2,8 +2,8 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const config = require('../../config');
 
-// User database
-const users = [];
+// import user data storage
+const { users } = require('../../models');
 
 // create user account
 exports.signup = (req, res) => {
