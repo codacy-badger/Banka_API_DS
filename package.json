@@ -7,7 +7,7 @@
     "start": "node index.js",
     "test": "nyc --reporter=html --reporter=text mocha",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "lint": "node_modules/.bin/eslint --fix index.js",
+    "lint": "node_modules/.bin/eslint --fix index.js controllers api-routes middleware",
     "validate": "npm-run-all --parallel test lint",
     "pre-commit": "npm run validate",
     "pre-push": "npm run validate"
@@ -40,8 +40,15 @@
     "request": "^2.88.0"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.3",
     "express": "^4.16.4",
+    "istanbul": "^0.4.5",
+    "jsonwebtoken": "^8.5.1",
     "mocha": "^6.0.2",
     "nyc": "^13.3.0"
+  },
+  "engines": {
+    "node": "11.12.0"
   }
 }
