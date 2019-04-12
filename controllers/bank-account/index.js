@@ -20,7 +20,6 @@ const currentUser = (id) => {
 // Create bank account
 exports.createBankAccount = (req, res) => {
   const { type } = req.body;
-  //   console.log(users);
   // generate user id basing on list length
   const accountId = bankAccount.length + 1;
 
@@ -66,12 +65,21 @@ exports.accountStatus = (req, res) => {
 
   // User must be staff/admin to perform the operation
   const userData = currentUser(req.userId);
-  if (userData.type === 'client') {
+  if (userData) {
+    if (userData.type === 'client') {
+      res.status(401).json({
+        status: 401,
+        error: 'Access denied !!!',
+      });
+    }
+  } else {
+    // User does not exist. Deleted when list was cleard
     res.status(401).json({
       status: 401,
-      error: 'Access denied !!!',
+      error: 'Token is expired, please login again!',
     });
   }
+
   // status should dormant / active
   const statusArray = ['dormant', 'active'];
   const isPresent = (statusArray.indexOf(status) > -1);
@@ -107,6 +115,57 @@ exports.accountStatus = (req, res) => {
       data: {
         accountNumber,
         status,
+      },
+    });
+  }
+};
+
+
+// Deactivate/acivate bank account
+exports.deleteAccount = (req, res) => {
+  const { params: { accountNumber } } = req;
+
+  // User must be staff/admin to perform the operation
+  const userData = currentUser(req.userId);
+  if (userData) {
+    if (userData.type === 'client') {
+      res.status(401).json({
+        status: 401,
+        error: 'Access denied !!!',
+      });
+    }
+  } else {
+    // User does not exist. Deleted when list was cleard
+    res.status(401).json({
+      status: 401,
+      error: 'Token is expired, please login again!',
+    });
+  }
+  // Check for bank account with the provided account number
+  let accountObj = null;
+  let index = null;
+  bankAccount.forEach((account, i) => {
+    if (account.accountNumber.toString() === accountNumber) {
+      accountObj = account;
+      index = i;
+    }
+  });
+
+  // Check if account exists
+  if (!accountObj) {
+    // Account does not exist
+    res.status(404).json({
+      status: 404,
+      error: 'Invalid account number, please check and try again!',
+    });
+  } else {
+    // Delete bank account
+    bankAccount.splice(index, 1);
+    // Return account details
+    res.status(202).json({
+      status: 202,
+      data: {
+        message: `Account with accountNumber: ${accountNumber} has been successfuly deleted`,
       },
     });
   }
