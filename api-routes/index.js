@@ -17,7 +17,8 @@ router.route('/login')
 router.route('/accounts')
   .post(middleware.verifyToken, bankController.createBankAccount);
 router.route('/account/:accountNumber')
-  .post(middleware.verifyToken, bankController.accountStatus);
+  .patch(middleware.verifyToken, bankController.accountStatus)
+  .delete(middleware.verifyToken, bankController.deleteAccount);
 router.route('/users')
   .get(middleware.verifyToken, loginController.allUsers);
 // Export API routes
