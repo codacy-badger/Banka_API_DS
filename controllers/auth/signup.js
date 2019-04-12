@@ -11,6 +11,30 @@ exports.signup = (req, res) => {
     email, firstName, lastName, password, type, isAdmin,
   } = req.body;
 
+  // Email and Password are required
+  if (!email || !password || !type) {
+    return res.status(400).json({
+      status: 400,
+      error: 'Email, Password and type are required !',
+    });
+  }
+
+  // Type should be client / staff
+  const userTypes = ['client', 'staff'];
+  type.toLowerCase();
+  const isTrue = userTypes.indexOf(type);
+  if (isTrue < 0) {
+    return res.status(400).json({
+      status: 400,
+      error: 'Type should either be client / staff',
+    });
+  }
+
+  let isAdminTrue = isAdmin;
+  if (type === 'client') {
+    isAdminTrue = false;
+  }
+
   // generate user id basing on list length
   const userId = users.length + 1;
 
@@ -19,11 +43,11 @@ exports.signup = (req, res) => {
 
   // capture data
   const data = {
-    id: userId, email, firstName, lastName, password: hashedPassword, type, isAdmin,
+    id: userId, email, firstName, lastName, password: hashedPassword, type, isAdmin: isAdminTrue,
   };
   const doesEmailAlreadyExist = users.some(user => user.email === data.email);
   if (doesEmailAlreadyExist) {
-    res.status(400).json({
+    return res.status(400).json({
       status: 400,
       error: 'Email already exists, try another',
     });
@@ -31,7 +55,7 @@ exports.signup = (req, res) => {
   users.push(data);
 
   // return the JWT token for the future API calls
-  res.status(200).json({
+  return res.status(200).json({
     status: 200,
     data: {
       token: middleware.token(data.id),
@@ -40,7 +64,7 @@ exports.signup = (req, res) => {
       lastName,
       email,
       type,
-      isAdmin,
+      isAdmin: data.isAdmin,
     },
   });
 };
