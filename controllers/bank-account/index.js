@@ -17,6 +17,7 @@ const currentUser = (id) => {
   return userData;
 };
 
+// Create bank account
 exports.createBankAccount = (req, res) => {
   const { type } = req.body;
   //   console.log(users);
@@ -54,6 +55,58 @@ exports.createBankAccount = (req, res) => {
         lastName: user.lastName,
         email: user.email,
         openingBalance: data.balance,
+      },
+    });
+  }
+};
+
+// Deactivate/acivate bank account
+exports.accountStatus = (req, res) => {
+  const { body: { status }, params: { accountNumber } } = req;
+
+  // User must be staff/admin to perform the operation
+  const userData = currentUser(req.userId);
+  if (userData.type === 'client') {
+    res.status(401).json({
+      status: 401,
+      error: 'Access denied !!!',
+    });
+  }
+  // status should dormant / active
+  const statusArray = ['dormant', 'active'];
+  const isPresent = (statusArray.indexOf(status) > -1);
+  if (!isPresent) {
+    res.status(400).json({
+      status: 400,
+      error: 'Status should either be active or dormant',
+    });
+  }
+
+  // Check for bank account with the provided account number
+  let accountObj = null;
+  bankAccount.forEach((account) => {
+    if (account.accountNumber.toString() === accountNumber) {
+      accountObj = account;
+    }
+  });
+
+  // Check if account exists
+  if (!accountObj) {
+    // Account does not exist
+    res.status(404).json({
+      status: 404,
+      error: 'Invalid account number, please check and try again!',
+    });
+  } else {
+    // Update the account status from active to deactive
+    accountObj.status = 'dormant';
+
+    // Return account details
+    res.status(202).json({
+      status: 202,
+      data: {
+        accountNumber,
+        status,
       },
     });
   }
