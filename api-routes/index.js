@@ -16,6 +16,8 @@ router.route('/login')
   .post(loginController.login);
 router.route('/accounts')
   .post(middleware.verifyToken, bankController.createBankAccount);
+router.route('/account/:accountNumber')
+  .post(middleware.verifyToken, bankController.accountStatus);
 router.route('/users')
   .get(middleware.verifyToken, loginController.allUsers);
 // Export API routes
