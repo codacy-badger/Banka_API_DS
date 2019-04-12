@@ -19,6 +19,10 @@ router.route('/accounts')
 router.route('/account/:accountNumber')
   .patch(middleware.verifyToken, bankController.accountStatus)
   .delete(middleware.verifyToken, bankController.deleteAccount);
+router.route('/transactions/:accountNumber/credit')
+  .post(middleware.verifyToken, bankController.creditTransaction);
+router.route('/transactions/:accountNumber/debit')
+  .post(middleware.verifyToken, bankController.debitTransaction);
 router.route('/users')
   .get(middleware.verifyToken, loginController.allUsers);
 // Export API routes
