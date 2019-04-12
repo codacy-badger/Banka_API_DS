@@ -1,4 +1,8 @@
 // User database
+// Format
+// {
+//   id, email, firstName, lastName, password: hashedPassword, type, isAdmin: isAdminTrue,
+// }
 const users = [];
 
 // Bank account database
