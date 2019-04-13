@@ -8,6 +8,7 @@ const bankTransactions = require('../controllers/bank-account/transactions');
 const deleteAccount = require('../controllers/bank-account/deleteAccount');
 const accountStatus = require('../controllers/bank-account/accountStatus');
 const createBankAccount = require('../controllers/bank-account/createAccount');
+const transationHistory = require('../controllers/bank-account/accountHistory');
 
 // import VerifyToken middleware function
 const middleware = require('../middleware');
@@ -26,6 +27,8 @@ router.route('/transactions/:accountNumber/credit')
   .post(middleware.verifyToken, bankTransactions.creditTransaction);
 router.route('/transactions/:accountNumber/debit')
   .post(middleware.verifyToken, bankTransactions.debitTransaction);
+router.route('/account/history')
+  .get(middleware.verifyToken, transationHistory);
 router.route('/users')
   .get(middleware.verifyToken, loginController.allUsers);
 // Export API routes
