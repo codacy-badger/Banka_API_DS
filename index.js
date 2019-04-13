@@ -13,7 +13,9 @@ const app = express();
 app.use(bodyParser.urlencoded({
   extended: true,
 }));
-app.use(bodyParser.json());
+apiRoutes.use(bodyParser.json());
+app.use(bodyParser.json({ type: 'application/json' }));
+app.use(bodyParser.text());
 
 // use API routes in the app
 app.use('/api/v1', apiRoutes);
@@ -25,3 +27,5 @@ app.listen(PORT, () => {
   // eslint-disable-next-line no-console
   console.log(`Running Banka on port ${PORT}`);
 });
+
+module.exports = app; // for testing
