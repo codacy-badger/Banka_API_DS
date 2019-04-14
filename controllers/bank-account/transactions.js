@@ -4,6 +4,15 @@ const { bankAccount } = require('../../models');
 // Current user information
 const utils = require('./utils');
 
+const checkAmount = (cash, res) => {
+  // Zero and negative values not allowed
+  if (cash <= 0) {
+    return res.status(400).json({
+      status: 400,
+      error: 'Amount must greated than zero(0)',
+    });
+  }
+};
 // Credit user account
 exports.creditTransaction = (req, res) => {
   const { params: { accountNumber }, body: { amount } } = req;
@@ -18,13 +27,9 @@ exports.creditTransaction = (req, res) => {
     });
   }
   // Zero and negative values not allowed
-  if (cash <= 0) {
-    return res.status(400).json({
-      status: 400,
-      error: 'Amount must greated than zero(0)',
-    });
+  if (checkAmount(cash, res)) {
+    return checkAmount(cash, res);
   }
-
   // User must be staff/admin to perform the operation
   if (utils.checkUserType(utils.currentUser(req.userId), res)) {
     return utils.checkUserType(utils.currentUser(req.userId), res);
@@ -34,13 +39,11 @@ exports.creditTransaction = (req, res) => {
   const accountObj = utils.checkAccountNumber(bankAccount, accountNumber);
 
   // Check if account exists
-  if (!accountObj) {
+  if (utils.ifNoAccount(accountObj, res)) {
     // Account does not exist
-    return res.status(404).json({
-      status: 404,
-      error: 'Invalid account number, please check and try again!',
-    });
+    return utils.ifNoAccount(accountObj, res);
   }
+
   // Credit bank account
   accountObj.balance = (Number(accountObj.balance) + cash);
   // save debit transaction
@@ -70,11 +73,8 @@ exports.debitTransaction = (req, res) => {
   }
 
   // Zero and negative values not allowed
-  if (cash <= 0) {
-    return res.status(400).json({
-      status: 400,
-      error: 'Amount must greated than zero(0)',
-    });
+  if (checkAmount(cash, res)) {
+    return checkAmount(cash, res);
   }
 
   // User must be staff/admin to perform the operation
@@ -86,13 +86,11 @@ exports.debitTransaction = (req, res) => {
   const accountObj = utils.checkAccountNumber(bankAccount, accountNumber);
 
   // Check if account exists
-  if (!accountObj) {
+  if (utils.ifNoAccount(accountObj, res)) {
     // Account does not exist
-    return res.status(404).json({
-      status: 404,
-      error: 'Invalid account number, please check and try again!',
-    });
+    return utils.ifNoAccount(accountObj, res);
   }
+
   // Debit bank account
   // User should not request more than the available balance
   if (cash > Number(accountObj.balance)) {

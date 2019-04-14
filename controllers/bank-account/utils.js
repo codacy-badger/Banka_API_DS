@@ -83,3 +83,14 @@ exports.checkAccountNumber = (bankAccount, accountNumber) => {
   });
   return Obj;
 };
+
+// If account with the account number does not exist
+exports.ifNoAccount = (accountObj, res) => {
+  if (!accountObj) {
+    // Account does not exist
+    return res.status(404).json({
+      status: 404,
+      error: 'Invalid account number, please check and try again!',
+    });
+  }
+};

@@ -24,21 +24,14 @@ const accountStatus = (req, res) => {
   }
 
   // Check for bank account with the provided account number
-  let accountObj = null;
-  bankAccount.forEach((account) => {
-    if (account.accountNumber.toString() === accountNumber) {
-      accountObj = account;
-    }
-  });
+  const accountObj = utils.checkAccountNumber(bankAccount, accountNumber);
 
   // Check if account exists
-  if (!accountObj) {
+  if (utils.ifNoAccount(accountObj, res)) {
     // Account does not exist
-    return res.status(404).json({
-      status: 404,
-      error: 'Invalid account number, please check and try again!',
-    });
+    return utils.ifNoAccount(accountObj, res);
   }
+
   // Update the account status from active to deactive
   accountObj.status = 'dormant';
 

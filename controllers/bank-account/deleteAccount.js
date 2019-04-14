@@ -24,12 +24,9 @@ const deleteAccount = (req, res) => {
   });
 
   // Check if account exists
-  if (!accountObj) {
+  if (utils.ifNoAccount(accountObj, res)) {
     // Account does not exist
-    return res.status(404).json({
-      status: 404,
-      error: 'Invalid account number, please check and try again!',
-    });
+    return utils.ifNoAccount(accountObj, res);
   }
   // Delete bank account
   bankAccount.splice(index, 1);
