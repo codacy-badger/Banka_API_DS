@@ -2,7 +2,7 @@
 // Import Bank account database
 const { bankAccount } = require('../../models');
 // Current user information
-const currentUser = require('./utils');
+const utils = require('./utils');
 
 // Credit user account
 exports.creditTransaction = (req, res) => {
@@ -26,21 +26,10 @@ exports.creditTransaction = (req, res) => {
   }
 
   // User must be staff/admin to perform the operation
-  const userData = currentUser(req.userId);
-  if (userData) {
-    if (userData.type === 'client' || userData.isAdmin === false) {
-      return res.status(401).json({
-        status: 401,
-        error: 'Access denied !!!',
-      });
-    }
-  } else {
-    // User does not exist. Deleted when list was cleared
-    return res.status(401).json({
-      status: 401,
-      error: 'Token is expired, please login again!',
-    });
+  if (utils.checkUserType(utils.currentUser(req.userId), res)) {
+    return utils.checkUserType(utils.currentUser(req.userId), res);
   }
+
   // Check for bank account with the provided account number
   let accountObj = null;
   bankAccount.forEach((account) => {
@@ -103,22 +92,12 @@ exports.debitTransaction = (req, res) => {
       error: 'Amount must greated than zero(0)',
     });
   }
+
   // User must be staff/admin to perform the operation
-  const userData = currentUser(req.userId);
-  if (userData) {
-    if (userData.type === 'client' || userData.isAdmin === false) {
-      return res.status(401).json({
-        status: 401,
-        error: 'Access denied !!!',
-      });
-    }
-  } else {
-    // User does not exist. Deleted when list was cleared
-    return res.status(401).json({
-      status: 401,
-      error: 'Token is expired, please login again!',
-    });
+  if (utils.checkUserType(utils.currentUser(req.userId), res)) {
+    return utils.checkUserType(utils.currentUser(req.userId), res);
   }
+
   // Check for bank account with the provided account number
   let accountObj = null;
   bankAccount.forEach((account) => {
