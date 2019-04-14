@@ -18,7 +18,21 @@ exports.signup = (req, res) => {
       error: 'Email, Password and type are required !',
     });
   }
+  // Validate email
+  if (!email.match(/^[A-Za-z0-9.+_-]+@[A-Za-z0-9._-]+\.[a-zA-Z]{2,}$/)) {
+    return res.status(400).json({
+      status: 400,
+      error: 'Invalid email format ',
+    });
+  }
 
+  // Validate password
+  if (!password.match(/^(?=.*\d)[0-9a-zA-Z]{8,}$/)) {
+    return res.status(400).json({
+      status: 400,
+      error: 'Weak password, must be at least 8 characters and have at least 1 letter and number',
+    });
+  }
   // Type should be client / staff
   const userTypes = ['client', 'staff'];
   type.toLowerCase();
