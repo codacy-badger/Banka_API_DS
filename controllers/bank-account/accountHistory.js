@@ -26,8 +26,8 @@ const transationHistory = (req, res) => {
     }
   });
 
-  return res.status(201).json({
-    status: 201,
+  return res.status(200).json({
+    status: 200,
     data: {
       firstName: user.firstName,
       lastName: user.lastName,

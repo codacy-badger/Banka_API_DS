@@ -94,3 +94,13 @@ exports.ifNoAccount = (accountObj, res) => {
     });
   }
 };
+
+exports.checkAmount = (cash, res) => {
+  // Zero and negative values not allowed
+  if (cash <= 0) {
+    return res.status(400).json({
+      status: 400,
+      error: 'Amount must greated than zero(0)',
+    });
+  }
+};

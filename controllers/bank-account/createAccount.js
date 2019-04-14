@@ -19,6 +19,18 @@ const createBankAccount = (req, res) => {
       error: 'Account type is required !',
     });
   }
+
+  // TYpe should be current or savings
+  const accountTypes = ['savings', 'current'];
+  type.toLowerCase();
+  const isTrue = accountTypes.indexOf(type);
+  if (isTrue < 0) {
+    return res.status(400).json({
+      status: 400,
+      error: 'Type should either be savings / current',
+    });
+  }
+
   // generate user id basing on list length
   const accountId = bankAccount.length + 1;
 
