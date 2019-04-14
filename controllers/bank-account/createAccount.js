@@ -2,7 +2,7 @@
 // Import Bank account database
 const { bankAccount } = require('../../models');
 // Current user information
-const currentUser = require('./utils');
+const utils = require('./utils');
 
 const datetime = new Date();
 
@@ -35,7 +35,7 @@ const createBankAccount = (req, res) => {
   };
 
   // Getting the current user object
-  const user = currentUser(req.userId);
+  const user = utils.currentUser(req.userId);
 
   if (!user) {
     // It is possible to have no user object but with valid token Forexample if header

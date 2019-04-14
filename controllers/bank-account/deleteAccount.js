@@ -2,28 +2,17 @@
 // Import Bank account database
 const { bankAccount } = require('../../models');
 // Current user information
-const currentUser = require('./utils');
+const utils = require('./utils');
 
 // Deactivate/acivate bank account
 const deleteAccount = (req, res) => {
   const { params: { accountNumber } } = req;
 
   // User must be staff/admin to perform the operation
-  const userData = currentUser(req.userId);
-  if (userData) {
-    if (userData.type === 'client') {
-      return res.status(401).json({
-        status: 401,
-        error: 'Access denied !!!',
-      });
-    }
-  } else {
-    // User does not exist. Deleted when list was cleard
-    return res.status(401).json({
-      status: 401,
-      error: 'Token is expired, please login again!',
-    });
+  if (utils.isNotClient(utils.currentUser(req.userId), res)) {
+    return utils.isNotClient(utils.currentUser(req.userId), res);
   }
+
   // Check for bank account with the provided account number
   let accountObj = null;
   let index = null;
