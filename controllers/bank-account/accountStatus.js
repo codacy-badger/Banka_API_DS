@@ -14,7 +14,7 @@ const accountStatus = (req, res) => {
   }
 
   // status should dormant / active
-  const statusArray = ['dormant', 'active'];
+  const statusArray = ['dormant', 'active', 'draft'];
   const isPresent = (statusArray.indexOf(status) > -1);
   if (!isPresent) {
     return res.status(400).json({
@@ -32,8 +32,8 @@ const accountStatus = (req, res) => {
     return utils.ifNoAccount(accountObj, res);
   }
 
-  // Update the account status from active to deactive
-  accountObj.status = 'dormant';
+  // Update the account status to active/dormant/draft to deactive
+  accountObj.status = status;
 
   // Return account details
   return res.status(202).json({

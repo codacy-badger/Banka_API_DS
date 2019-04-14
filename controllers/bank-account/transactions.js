@@ -4,15 +4,6 @@ const { bankAccount } = require('../../models');
 // Current user information
 const utils = require('./utils');
 
-const checkAmount = (cash, res) => {
-  // Zero and negative values not allowed
-  if (cash <= 0) {
-    return res.status(400).json({
-      status: 400,
-      error: 'Amount must greated than zero(0)',
-    });
-  }
-};
 // Credit user account
 exports.creditTransaction = (req, res) => {
   const { params: { accountNumber }, body: { amount } } = req;
@@ -27,8 +18,8 @@ exports.creditTransaction = (req, res) => {
     });
   }
   // Zero and negative values not allowed
-  if (checkAmount(cash, res)) {
-    return checkAmount(cash, res);
+  if (utils.checkAmount(cash, res)) {
+    return utils.checkAmount(cash, res);
   }
   // User must be staff/admin to perform the operation
   if (utils.checkUserType(utils.currentUser(req.userId), res)) {
@@ -73,8 +64,8 @@ exports.debitTransaction = (req, res) => {
   }
 
   // Zero and negative values not allowed
-  if (checkAmount(cash, res)) {
-    return checkAmount(cash, res);
+  if (utils.checkAmount(cash, res)) {
+    return utils.checkAmount(cash, res);
   }
 
   // User must be staff/admin to perform the operation

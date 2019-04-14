@@ -55,6 +55,16 @@ exports.signup_user_6 = {
   type: 'staff',
 };
 
+// user of type staff
+exports.signup_user_7 = {
+  email: 'staff@g.com',
+  firstName: 'Patrick',
+  lastName: 'KImanje',
+  password,
+  type: 'staff',
+  isAdmin: false,
+};
+
 // User login *************************************
 
 // email and assword exist
@@ -67,4 +77,15 @@ exports.login_user_1 = {
 exports.login_user_2 = {
   email,
   password: 'wrong password',
+};
+
+
+// Banking
+exports.bank_account_1 = {
+  type: 'current',
+};
+
+// invalid type
+exports.bank_account_2 = {
+  type: 'invalid',
 };
