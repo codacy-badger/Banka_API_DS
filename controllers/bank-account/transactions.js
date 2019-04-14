@@ -4,7 +4,6 @@ const { bankAccount } = require('../../models');
 // Current user information
 const utils = require('./utils');
 
-
 // Credit user account
 exports.creditTransaction = (req, res) => {
   const { params: { accountNumber }, body: { amount } } = req;
@@ -32,12 +31,7 @@ exports.creditTransaction = (req, res) => {
   }
 
   // Check for bank account with the provided account number
-  let accountObj = null;
-  bankAccount.forEach((account) => {
-    if (account.accountNumber.toString() === accountNumber) {
-      accountObj = account;
-    }
-  });
+  const accountObj = utils.checkAccountNumber(bankAccount, accountNumber);
 
   // Check if account exists
   if (!accountObj) {
@@ -49,13 +43,9 @@ exports.creditTransaction = (req, res) => {
   }
   // Credit bank account
   accountObj.balance = (Number(accountObj.balance) + cash);
-  accountObj.transactionHistory.push({
-    transactionId: new Date().valueOf(),
-    transactionType: 'Debit',
-    cashier: req.userId,
-    accountBalance: accountObj.balance,
-    amount: cash,
-  });
+  // save debit transaction
+  utils.saveTransaction(accountObj, req, cash, 'Credit');
+
   const { transactionHistory } = accountObj;
   const transaction = transactionHistory[transactionHistory.length - 1];
   // Return account details
@@ -93,12 +83,7 @@ exports.debitTransaction = (req, res) => {
   }
 
   // Check for bank account with the provided account number
-  let accountObj = null;
-  bankAccount.forEach((account) => {
-    if (account.accountNumber.toString() === accountNumber) {
-      accountObj = account;
-    }
-  });
+  const accountObj = utils.checkAccountNumber(bankAccount, accountNumber);
 
   // Check if account exists
   if (!accountObj) {
@@ -119,13 +104,7 @@ exports.debitTransaction = (req, res) => {
   // Otherwise continue
   accountObj.balance = (Number(accountObj.balance) - cash);
   // Register in transaction history
-  accountObj.transactionHistory.push({
-    transactionId: new Date().valueOf(),
-    transactionType: 'Credit',
-    cashier: req.userId,
-    accountBalance: accountObj.balance,
-    amount: cash,
-  });
+  utils.saveTransaction(accountObj, req, cash, 'Debit');
 
   const { transactionHistory } = accountObj;
   const transaction = transactionHistory[transactionHistory.length - 1];

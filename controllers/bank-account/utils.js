@@ -61,3 +61,25 @@ exports.transactionData = (transaction, accountObj) => (
     accountBalance: accountObj.balance,
   }
 );
+
+// Save bank transaction
+exports.saveTransaction = (accountObj, req, cash, type) => {
+  accountObj.transactionHistory.push({
+    transactionId: new Date().valueOf(),
+    transactionType: type,
+    cashier: req.userId,
+    accountBalance: accountObj.balance,
+    amount: cash,
+  });
+};
+
+// Check for the account number
+exports.checkAccountNumber = (bankAccount, accountNumber) => {
+  let Obj = null;
+  bankAccount.forEach((account) => {
+    if (account.accountNumber.toString() === accountNumber) {
+      Obj = account;
+    }
+  });
+  return Obj;
+};
