@@ -85,5 +85,32 @@ describe('Authentication', () => {
           done();
         });
     });
+
+    it('should raise an error when email is invalid', (done) => {
+      chai.request(BASE_URL)
+        .post(SIGNUP_URL)
+        .send(base.signup_user_5)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.be.a('object');
+          res.body.should.have.property('status');
+          res.body.should.have.property('error').eql('Invalid email format ');
+          done();
+        });
+    });
+
+    it('should raise an error when password is invalid', (done) => {
+      chai.request(BASE_URL)
+        .post(SIGNUP_URL)
+        .send(base.signup_user_6)
+        .end((err, res) => {
+          const error = 'Weak password, must be at least 8 characters and have at least 1 letter and number';
+          res.should.have.status(400);
+          res.body.should.be.a('object');
+          res.body.should.have.property('status');
+          res.body.should.have.property('error').eql(error);
+          done();
+        });
+    });
   });
 });

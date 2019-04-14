@@ -43,6 +43,17 @@ exports.signup_user_4 = {
   isAdmin: true,
 };
 
+exports.signup_user_5 = {
+  email: 'invalid format',
+  password,
+  type: 'staff',
+};
+
+exports.signup_user_6 = {
+  email,
+  password: 'invalid',
+  type: 'staff',
+};
 
 // User login *************************************
 
