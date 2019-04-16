@@ -9,8 +9,8 @@ const base = require('./base');
 
 // Base URL
 const BASE_URL = 'http://localhost:8080/api/v1';
-const LOGIN_URL = '/login';
-const SIGNUP_URL = '/signup';
+const LOGIN_URL = '/auth/login';
+const SIGNUP_URL = '/auth/signup';
 
 // Configure chai
 chai.use(chaiHttp);
