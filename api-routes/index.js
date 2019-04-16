@@ -14,9 +14,9 @@ const transationHistory = require('../controllers/bank-account/accountHistory');
 const middleware = require('../middleware');
 
 // auth routes
-router.route('/signup')
+router.route('/auth/signup')
   .post(signupController.signup);
-router.route('/login')
+router.route('/auth/login')
   .post(loginController.login);
 router.route('/accounts')
   .post(middleware.verifyToken, createBankAccount);

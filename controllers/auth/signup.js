@@ -11,6 +11,10 @@ exports.signup = (req, res) => {
     email, firstName, lastName, password, type, isAdmin,
   } = req.body;
 
+  // format firstName and lastName
+  const fisrtN = firstName.split(' ').join('');
+  const lastN = lastName.split(' ').join('');
+
   // Email and Password are required
   if (!email || !password || !type) {
     return res.status(400).json({
@@ -35,16 +39,27 @@ exports.signup = (req, res) => {
   }
   // Type should be client / staff
   const userTypes = ['client', 'staff'];
-  type.toLowerCase();
-  const isTrue = userTypes.indexOf(type);
+
+  const userType = type.toLowerCase();
+  const isTrue = userTypes.indexOf(userType);
   if (isTrue < 0) {
     return res.status(400).json({
       status: 400,
       error: 'Type should either be client / staff',
     });
   }
+  // isAdmin should be [false/true]
+  const booln = ['false', 'true'];
+  const admin = isAdmin ? isAdmin.toLowerCase() : 'false';
+  const result = booln.indexOf(admin);
+  if (result < 0) {
+    return res.status(400).json({
+      status: 400,
+      error: 'isAdmin should be set to true/false',
+    });
+  }
 
-  let isAdminTrue = isAdmin;
+  let isAdminTrue = admin;
   if (type === 'client') {
     isAdminTrue = false;
   }
@@ -57,7 +72,13 @@ exports.signup = (req, res) => {
 
   // capture data
   const data = {
-    id: userId, email, firstName, lastName, password: hashedPassword, type, isAdmin: isAdminTrue,
+    id: userId,
+    email,
+    firstName: fisrtN,
+    lastName: lastN,
+    password: hashedPassword,
+    type: userType,
+    isAdmin: isAdminTrue,
   };
   const doesEmailAlreadyExist = users.some(user => user.email === data.email);
   if (doesEmailAlreadyExist) {
@@ -74,10 +95,10 @@ exports.signup = (req, res) => {
     data: {
       token: middleware.token(data.id),
       id: data.id,
-      firstName,
-      lastName,
+      firstName: data.firstName,
+      lastName: data.lastName,
       email,
-      type,
+      type: data.userType,
       isAdmin: data.isAdmin,
     },
   });

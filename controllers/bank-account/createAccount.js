@@ -21,13 +21,13 @@ const createBankAccount = (req, res) => {
   }
 
   // TYpe should be current or savings
-  const accountTypes = ['savings', 'current'];
+  const accountTypes = ['savings', 'current', 'loan'];
   type.toLowerCase();
   const isTrue = accountTypes.indexOf(type);
   if (isTrue < 0) {
     return res.status(400).json({
       status: 400,
-      error: 'Type should either be savings / current',
+      error: 'Type should either be savings, current / loan',
     });
   }
 
