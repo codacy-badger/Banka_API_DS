@@ -10,8 +10,9 @@ exports.creditTransaction = (req, res) => {
 
   // Ensure amount is float / integer
   const cash = Number(amount);
-  // eslint-disable-next-line use-isnan
-  if (cash === NaN) {
+
+  // eslint-disable-next-line no-restricted-globals
+  if (isNaN(amount)) {
     return res.json({
       status: 400,
       error: 'Invalid amount format !!!',
@@ -55,8 +56,9 @@ exports.debitTransaction = (req, res) => {
 
   // Ensure amount is float / integer
   const cash = Number(amount);
-  // eslint-disable-next-line use-isnan
-  if (cash === NaN) {
+
+  // eslint-disable-next-line no-restricted-globals
+  if (isNaN(amount)) {
     return res.status(400).json({
       status: 400,
       error: 'Invalid amount format !!!',
