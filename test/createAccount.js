@@ -44,6 +44,24 @@ describe.only('Login Authentication ', () => {
         });
     });
 
+    it('should return 400 for an ivalid account type', (done) => {
+      chai.request(BASE_URL)
+        .post(LOGIN_URL)
+        .send(base.login_user_1)
+        .end((err, res) => {
+          chai.request(BASE_URL)
+            .post('/accounts')
+            .set('x-access-token', res.body.data.token)
+            .send(base.bank_account_2)
+            .end((err, resp) => {
+              resp.should.have.status(400);
+              resp.body.should.be.a('object');
+              resp.body.should.have.property('status');
+              resp.body.should.have.property('error');
+              done();
+            });
+        });
+    });
     it('should return 401 for unauthorized user', (done) => {
       chai.request(BASE_URL)
         .post('/accounts')

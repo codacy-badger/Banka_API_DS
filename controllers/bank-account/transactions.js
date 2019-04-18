@@ -20,7 +20,7 @@ exports.creditTransaction = (req, res) => {
 
   // eslint-disable-next-line no-restricted-globals
   if (isNaN(amount)) {
-    return res.json({
+    return res.status(400).json({
       status: 400,
       error: 'Invalid amount format !!!',
     });

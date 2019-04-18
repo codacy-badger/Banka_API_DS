@@ -15,7 +15,7 @@ const SIGNUP_URL = '/auth/signup';
 chai.use(chaiHttp);
 chai.should();
 
-describe('Authentication', () => {
+describe.only('Authentication', () => {
   beforeEach(() => {
     database.users.length = 0; // empty user collection
   });
@@ -41,7 +41,7 @@ describe('Authentication', () => {
         .end((err, res) => {
           res.should.have.status(400);
           res.body.should.be.a('object');
-          res.body.should.have.property('error').eql('Email, Password and type are required !');
+          res.body.should.have.property('error');
           done();
         });
     });
@@ -71,18 +71,16 @@ describe('Authentication', () => {
       chai.request(BASE_URL)
         .post(SIGNUP_URL)
         .send(base.signup_user_4)
-        .end((err, res) => {
-          res.should.have.status(200);
-          res.body.should.be.a('object');
-        });
-      // Create another user with the same email
-      chai.request(BASE_URL)
-        .post(SIGNUP_URL)
-        .send(base.signup_user_4)
-        .end((err, res) => {
-          res.should.have.status(400);
-          res.body.should.be.a('object');
-          done();
+        .end(() => {
+          // Create another user with the same email
+          chai.request(BASE_URL)
+            .post(SIGNUP_URL)
+            .send(base.signup_user_4)
+            .end((error, resp) => {
+              resp.should.have.status(400);
+              resp.body.should.be.a('object');
+              done();
+            });
         });
     });
 
@@ -109,6 +107,47 @@ describe('Authentication', () => {
           res.body.should.be.a('object');
           res.body.should.have.property('status');
           res.body.should.have.property('error').eql(error);
+          done();
+        });
+    });
+
+    it('should raise an error if firstName has special characters', (done) => {
+      chai.request(BASE_URL)
+        .post(SIGNUP_URL)
+        .send(base.signup_user_8)
+        .end((err, res) => {
+          const error = 'Names should not contain special characters';
+          res.should.have.status(400);
+          res.body.should.be.a('object');
+          res.body.should.have.property('status');
+          res.body.should.have.property('error').eql(error);
+          done();
+        });
+    });
+
+    it('should raise an error if lastName has special characters', (done) => {
+      chai.request(BASE_URL)
+        .post(SIGNUP_URL)
+        .send(base.signup_user_9)
+        .end((err, res) => {
+          const error = 'Names should not contain special characters';
+          res.should.have.status(400);
+          res.body.should.be.a('object');
+          res.body.should.have.property('status');
+          res.body.should.have.property('error').eql(error);
+          done();
+        });
+    });
+
+    it('should raise an error isAdmin is not false/true', (done) => {
+      chai.request(BASE_URL)
+        .post(SIGNUP_URL)
+        .send(base.signup_user_10)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.be.a('object');
+          res.body.should.have.property('status');
+          res.body.should.have.property('error');
           done();
         });
     });
