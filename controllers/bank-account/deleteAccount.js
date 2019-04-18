@@ -4,7 +4,7 @@ const { bankAccount } = require('../../models');
 // Current user information
 const utils = require('./utils');
 
-// Deactivate/acivate bank account
+// Delete bank account
 const deleteAccount = (req, res) => {
   const { params: { accountNumber } } = req;
 

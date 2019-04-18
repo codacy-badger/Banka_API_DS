@@ -16,11 +16,11 @@ exports.login = (req, res) => {
     });
   }
 
-  const isAuthenticated = users.some(
-    user => bcrypt.compareSync(password, user.password) && user.email === email,
-  );
+  // Get for the currently logged in user
+  const returnUser = user => bcrypt.compareSync(password, user.password) && user.email === email;
+  const userObject = users.find(returnUser);
 
-  if (!isAuthenticated) {
+  if (!userObject) {
     // Wrong password
     return res.status(401).json({
       status: 401,
@@ -28,20 +28,16 @@ exports.login = (req, res) => {
     });
   }
 
-  users.forEach((user) => {
-    if (user.email === email) {
-      // return the JWT token for the future API calls
-      return res.status(200).json({
-        status: 200,
-        data: {
-          token: middleware.token(user.id),
-          id: user.id,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-        },
-      });
-    }
+  // return the JWT token for the future API calls
+  return res.status(200).json({
+    status: 200,
+    data: {
+      token: middleware.token(userObject.id),
+      id: userObject.id,
+      firstName: userObject.firstName,
+      lastName: userObject.lastName,
+      email: userObject.email,
+    },
   });
 };
 
@@ -49,5 +45,4 @@ exports.login = (req, res) => {
 exports.allUsers = (req, res) => res.status(200).json({
   status: 200,
   data: users,
-  id: req.userId,
 });
