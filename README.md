@@ -5,11 +5,11 @@
 | Travis CI status | [![Build Status](https://travis-ci.org/DrKimpatrick/Banka_API.svg?branch=master)](https://travis-ci.org/DrKimpatrick/Banka_API)                                          | [![Build Status](https://travis-ci.org/DrKimpatrick/Banka_API.svg?branch=develop)](https://travis-ci.org/DrKimpatrick/Banka_API)                                           |
 | Coveralls        | [![Coverage Status](https://coveralls.io/repos/github/DrKimpatrick/Banka_API/badge.svg?branch=master)](https://coveralls.io/github/DrKimpatrick/Banka_API?branch=master) | [![Coverage Status](https://coveralls.io/repos/github/DrKimpatrick/Banka_API/badge.svg?branch=develop)](https://coveralls.io/github/DrKimpatrick/Banka_API?branch=develop) |
 
-![demo image](demo.gif "Demo")
-
 # Banka_API
 
 API for the Banka app. A light-weight core banking application that powers banking operations. It is built in Node/Express and uses data structures to store data in memory (No use of a database).
+
+![demo image](demo.gif "Demo")
 
 ### Hosted Apps
 
