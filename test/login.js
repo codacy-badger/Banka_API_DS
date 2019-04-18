@@ -16,7 +16,7 @@ const SIGNUP_URL = '/auth/signup';
 chai.use(chaiHttp);
 chai.should();
 
-describe('Login Authentication ', () => {
+describe.only('Login Authentication ', () => {
   beforeEach(() => {
     database.users.length = 0; // empty user collection
   });
@@ -49,11 +49,11 @@ describe('Login Authentication ', () => {
     it('should raise an error if password or email are missing', (done) => {
       chai.request(BASE_URL)
         .post(LOGIN_URL)
-        .send({})
+        .send({ email: '', password: '' })
         .end((err, res) => {
           res.should.have.status(400);
           res.body.should.be.a('object');
-          res.body.should.have.property('error').eql('Email, Password and type are required !');
+          res.body.should.have.property('error');
           done();
         });
     });

@@ -40,19 +40,21 @@ exports.signup_user_4 = {
   lastName: 'KImanje',
   password,
   type: 'staff',
-  isAdmin: true,
+  isAdmin: 'true',
 };
 
 exports.signup_user_5 = {
   email: 'invalid format',
   password,
   type: 'staff',
+  firstName: 'Patrick',
 };
 
 exports.signup_user_6 = {
   email,
   password: 'invalid',
   type: 'staff',
+  firstName: 'Patrick',
 };
 
 // user of type staff
@@ -65,6 +67,35 @@ exports.signup_user_7 = {
   isAdmin: false,
 };
 
+// firstName with special characters
+exports.signup_user_8 = {
+  email: 'staff@g.com',
+  firstName: 'Pat%%%%',
+  lastName: 'KImanje',
+  password,
+  type: 'staff',
+  isAdmin: false,
+};
+
+// latName with special characters
+exports.signup_user_9 = {
+  email: 'staff@g.com',
+  firstName: 'Patrick',
+  lastName: 'KImanje%%',
+  password,
+  type: 'staff',
+  isAdmin: false,
+};
+
+// Invalid user type
+exports.signup_user_10 = {
+  email: 'staff@g.com',
+  firstName: 'Patrick',
+  lastName: 'KImanje',
+  password,
+  type: 'staff',
+  isAdmin: 'invalid',
+};
 // User login *************************************
 
 // email and assword exist
@@ -80,7 +111,7 @@ exports.login_user_2 = {
 };
 
 
-// Banking
+// Banking *****************************************
 exports.bank_account_1 = {
   type: 'current',
 };

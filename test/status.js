@@ -99,6 +99,48 @@ describe.only('Change account status by admin/staff', () => {
           });
       });
   });
+  it('should raise 400 when account status is not provided', (done) => {
+    chai.request(BASE_URL)
+      .post(LOGIN_URL)
+      .send(base.signup_user_7)
+      .end((err, res) => {
+        chai.request(BASE_URL)
+          .post('/accounts') // create account
+          .set('x-access-token', res.body.data.token)
+          .send(base.bank_account_1)
+          .end((err, resp) => {
+            chai.request(BASE_URL)
+              .patch('/account/invalid') // change account status
+              .set('x-access-token', res.body.data.token)
+              .send({})
+              .end((err, response) => {
+                response.should.have.status(400);
+                response.body.should.be.a('object');
+                response.body.should.have.property('status');
+                response.body.should.have.property('error');
+                done();
+              });
+          });
+      });
+  });
+  // When client (browser) responds with an invalid token
+  it('should raise 401 when Failed to authenticate token', (done) => {
+    chai.request(BASE_URL)
+      .post(LOGIN_URL)
+      .send(base.signup_user_7)
+      .end((err, res) => {
+        chai.request(BASE_URL)
+          .post('/accounts') // create account
+          .set('x-access-token', 'invalid token')
+          .send(base.bank_account_1)
+          .end((err, response) => {
+            response.should.have.status(401);
+            response.body.should.be.a('object');
+            response.body.should.have.property('status');
+            done();
+          });
+      });
+  });
 });
 
 // *********************************
