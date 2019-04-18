@@ -4,7 +4,7 @@ const { bankAccount } = require('../../models');
 // Current user information
 const utils = require('./utils');
 
-// Deactivate/acivate bank account
+// Deactivate/acivate/draft bank account
 const accountStatus = (req, res) => {
   const { body: { status }, params: { accountNumber } } = req;
 
@@ -12,14 +12,24 @@ const accountStatus = (req, res) => {
   if (utils.isNotClient(utils.currentUser(req.userId), res)) {
     return utils.isNotClient(utils.currentUser(req.userId), res);
   }
+  if (!status) {
+    return res.status(400).json({
+      status: 400,
+      error: 'Status is required',
+    });
+  }
+  // Remove trailing spaces
+  let newStatus = status.split(' ').join('');
+  // convert status to lowerCase
+  newStatus = newStatus.toLowerCase();
 
-  // status should dormant / active
+  // status should dormant / active / draft
   const statusArray = ['dormant', 'active', 'draft'];
-  const isPresent = (statusArray.indexOf(status) > -1);
+  const isPresent = (statusArray.indexOf(newStatus) > -1);
   if (!isPresent) {
     return res.status(400).json({
       status: 400,
-      error: 'Status should either be active or dormant',
+      error: 'Status should be active, dormant or draft',
     });
   }
 
@@ -33,14 +43,14 @@ const accountStatus = (req, res) => {
   }
 
   // Update the account status to active/dormant/draft to deactive
-  accountObj.status = status;
+  accountObj.status = newStatus;
 
   // Return account details
   return res.status(202).json({
     status: 202,
     data: {
       accountNumber,
-      status,
+      status: accountObj.status,
     },
   });
 };

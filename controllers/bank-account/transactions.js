@@ -7,6 +7,13 @@ const utils = require('./utils');
 // Credit user account
 exports.creditTransaction = (req, res) => {
   const { params: { accountNumber }, body: { amount } } = req;
+  // Amount required
+  if (!amount) {
+    return res.status(400).json({
+      status: 400,
+      error: 'Amount is required !',
+    });
+  }
 
   // Ensure amount is float / integer
   const cash = Number(amount);
@@ -54,6 +61,13 @@ exports.creditTransaction = (req, res) => {
 exports.debitTransaction = (req, res) => {
   const { params: { accountNumber }, body: { amount } } = req;
 
+  // Amount required
+  if (!amount) {
+    return res.status(400).json({
+      status: 400,
+      error: 'Amount is required !',
+    });
+  }
   // Ensure amount is float / integer
   const cash = Number(amount);
 
