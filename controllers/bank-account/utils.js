@@ -20,7 +20,7 @@ exports.checkUserType = (userData, res) => {
     if (userData.type === 'client' || userData.isAdmin === false) {
       return res.status(401).json({
         status: 401,
-        error: 'Access denied !!!',
+        error: 'Access denied!',
       });
     }
   } else {
@@ -37,7 +37,7 @@ exports.isNotClient = (userData, res) => {
     if (userData.type === 'client') {
       return res.status(401).json({
         status: 401,
-        error: 'Access denied !!!',
+        error: 'Access denied!',
       });
     }
   } else {
